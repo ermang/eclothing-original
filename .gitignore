@@ -1,0 +1,5 @@
+target/
+eclothingImage/
+*.iml
+.idea/
+*.log

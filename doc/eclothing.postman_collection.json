@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "90200cf1-4a06-4786-b2e0-99b0aded481e",
+		"name": "eclothing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create_product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"baseProductId\": 1,\n    \"color\": \"blue\",\n    \"price\": 99.99,\n    \"base64Images\": [\"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\"]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/product",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_base_product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"chino pantolon\",\n    \"category\": \"pantolon\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/baseProduct",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"baseProduct"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_stock",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"productId\": 1,\n    \"width\": null,\n    \"height\": null,\n    \"size\": \"M\",\n    \"quantity\": 3\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/stock",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read_all_products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"user\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add_item_to_cart",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"productId\": 1,\n\t\"stockId\": 1\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/cart",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read_cart",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/cart",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read_all_base_products",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/baseProducts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"baseProducts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
