@@ -116,6 +116,13 @@ public class MainService {
         return readBaseProducts;
     }
 
+    public ReadProductStock readProductStock(long productId) {
+        List<Stock> stocks = stockRepo.findAllByProductId(productId);
+        ReadProductStock rps = entity2DTO.stocks2ReadProductStock(stocks);
+
+        return rps;
+    }
+
 //    public ReadStock readStock(Long id) {
 //
 //    }

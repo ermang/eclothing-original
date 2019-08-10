@@ -3,7 +3,6 @@ package com.eg.eclothing.util;
 import com.eg.eclothing.dto.*;
 import com.eg.eclothing.entity.BaseProduct;
 import com.eg.eclothing.entity.Product;
-import com.eg.eclothing.entity.ProductImage;
 import com.eg.eclothing.entity.Stock;
 import com.eg.eclothing.repo.ProductImageRepo;
 import com.eg.eclothing.repo.projection.ImagePathOnly;
@@ -60,6 +59,24 @@ public class Entity2DTO {
         rbp.name = bp.getName();
 
         return rbp;
+    }
+
+    public ReadProductStock stocks2ReadProductStock(List<Stock> stocks) {
+        ReadProductStock rps = new ReadProductStock();
+        rps.stockDetails = new ArrayList<>();
+        rps.readBaseProduct = baseProduct2ReadBaseProduct(stocks.get(0).getProduct().getBaseProduct());
+        rps.readProduct = product2ReadProduct(stocks.get(0).getProduct());
+
+        for(Stock s: stocks) {
+           StockDetail stockDetail = new StockDetail();
+           stockDetail.width = s.getWidth();
+           stockDetail.height = s.getHeight();
+           stockDetail.size = s.getSize();
+           stockDetail.quantity = s.getQuantity();
+           rps.stockDetails.add(stockDetail);
+        }
+
+        return rps;
     }
 
 //    public ReadStockList stocks2ReadStockList(List<Stock> stocks) {

@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProductRepo extends JpaRepository<Product, Long> {
-//    @Query(value = "select p from Product p group by p.baseProduct.id")
+//    @Query(value = "select p from Product p group by p.readBaseProduct.id")
 //    List<Product> findAllProductsGroupByBaseProductId();
 
-    //@EntityGraph(value = "Product.baseProduct" ,type = EntityGraph.EntityGraphType.LOAD)
+    //@EntityGraph(value = "Product.readBaseProduct" ,type = EntityGraph.EntityGraphType.LOAD)
     @EntityGraph(attributePaths = {"baseProduct"})
     //@Query(value = "select p from Product")
     List<Product> findAll();//ProductsJoinedWithBaseProducts();

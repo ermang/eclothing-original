@@ -31,7 +31,7 @@ public class MainController {
         return true;
     }
 
-    @PostMapping("/baseProduct")
+    @PostMapping("/readBaseProduct")
     public Long createBaseProduct(@RequestBody CreateBaseProduct createBaseProduct) {
         Long result = mainService.createBaseProduct(createBaseProduct);
         return result;
@@ -62,6 +62,14 @@ public class MainController {
         ReadProductList result = mainService.readAllProducts();
         return result;
     }
+
+    @GetMapping("/product/{productId}/stock")
+    public ReadProductStock readProductStock(@PathVariable long productId) {
+        ReadProductStock result = mainService.readProductStock(productId);
+
+        return result;
+    }
+
     @PostMapping("/cart")
     public boolean addItemToCart(@RequestBody AddProductToCart addProductToCart) {
         boolean result = shoppingCartService.addItemToCart(addProductToCart);
