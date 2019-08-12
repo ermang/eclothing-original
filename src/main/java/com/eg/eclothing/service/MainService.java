@@ -124,6 +124,17 @@ public class MainService {
         return rps;
     }
 
+    public Boolean buyItems(AddProductToCartList addProductToCartList) {
+        for(AddProductToCart item: addProductToCartList.cartItems) {
+            Stock s =stockRepo.findById(item.stockId).get();
+            s.setQuantity(s.getQuantity() - item.quantity);
+
+            s = stockRepo.save(s);
+        }
+
+        return true;
+    }
+
 //    public ReadStock readStock(Long id) {
 //
 //    }

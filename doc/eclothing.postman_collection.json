@@ -288,6 +288,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "buy_items",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cartItems\": [\n        {\n            \"productId\": 1,\n            \"stockId\": 1,\n            \"quantity\": 2\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"buy"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

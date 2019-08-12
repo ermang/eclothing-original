@@ -94,6 +94,13 @@ public class MainController {
 
         return result;
     }
+
+    @PostMapping("/buy")
+    public Boolean buyItems(@RequestBody AddProductToCartList createUserDTO) {
+        Boolean result = mainService.buyItems(createUserDTO);
+
+        return result;
+    }
 //
 //    @PostMapping("/coupon")
 //    public Long createCoupon(@RequestBody CreateCouponDTO createCouponDTO) {
