@@ -33,7 +33,7 @@ public class MainController {
         return true;
     }
 
-    @PostMapping("/readBaseProduct")
+    @PostMapping("/baseProduct")
     public Long createBaseProduct(@RequestBody CreateBaseProduct createBaseProduct) {
         Long result = mainService.createBaseProduct(createBaseProduct);
         return result;
