@@ -69,6 +69,7 @@ public class Entity2DTO {
 
         for(Stock s: stocks) {
            StockDetail stockDetail = new StockDetail();
+           stockDetail.id = s.getId();
            stockDetail.width = s.getWidth();
            stockDetail.height = s.getHeight();
            stockDetail.size = s.getSize();
