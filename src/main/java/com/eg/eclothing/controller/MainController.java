@@ -5,6 +5,8 @@ import com.eg.eclothing.service.MainService;
 import com.eg.eclothing.service.ShoppingCartService;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 //@CrossOrigin(value = "http://localhost:4200" )//TODO: FIXME
 public class MainController {
@@ -58,8 +60,10 @@ public class MainController {
     }
 
     @GetMapping("/products")
-    public ReadProductList readProductList(){
-        ReadProductList result = mainService.readAllProducts();
+    public ReadProductList readProductList(@RequestParam(required = false)  String category,
+                                           @RequestParam(required = false) BigDecimal minPrice,
+                                           @RequestParam(required = false)  BigDecimal maxPrice){
+        ReadProductList result = mainService.readAllProducts(category, minPrice, maxPrice);
         return result;
     }
 

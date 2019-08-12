@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,8 +92,8 @@ public class MainService {
         return stock.getId();
     }
 
-    public ReadProductList readAllProducts() {
-        List<Product> products = productRepo.findAll();//ProductsJoinedWithBaseProducts();//findAll();
+    public ReadProductList readAllProducts(String category, BigDecimal minPrice, BigDecimal maxPrice) {
+        List<Product> products = productRepo.findAll(category, minPrice, maxPrice);//ProductsJoinedWithBaseProducts();//findAll();
         List<ReadProduct> readProducts = new ArrayList<>();
         for(Product p: products)
             readProducts.add(entity2DTO.product2ReadProduct(p));

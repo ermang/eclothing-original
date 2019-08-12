@@ -256,6 +256,38 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "read_all_products_with_filter",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/products?category=pantolon&minPrice=10&maxPrice=100",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "pantolon"
+						},
+						{
+							"key": "minPrice",
+							"value": "10"
+						},
+						{
+							"key": "maxPrice",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
