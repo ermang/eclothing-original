@@ -236,6 +236,26 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "read_product_stock",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/product/1/stock",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"product",
+						"1",
+						"stock"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
