@@ -1,9 +1,6 @@
 package com.eg.eclothing;
 
-import com.eg.eclothing.dto.CreateBaseProduct;
-import com.eg.eclothing.dto.CreateProduct;
-import com.eg.eclothing.dto.CreateStock;
-import com.eg.eclothing.dto.CreateUserDTO;
+import com.eg.eclothing.dto.*;
 
 public class TestUtil {
 
@@ -15,9 +12,15 @@ public class TestUtil {
         return createUserDTO;
     }
 
-    public CreateBaseProduct createBaseProduct(String category, String name) {
+    public CreateCategory createCategory() {
+        CreateCategory cc = new CreateCategory();
+        cc.name = "pantolon";
+        return cc;
+    }
+
+    public CreateBaseProduct createBaseProduct(Long categoryId, String name) {
         CreateBaseProduct cbp = new CreateBaseProduct();
-        cbp.category = category;
+        cbp.categoryId = categoryId;
         cbp.name = name;
 
         return cbp;

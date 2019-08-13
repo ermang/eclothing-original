@@ -31,6 +31,8 @@ public class MainServiceTest {
     @Autowired
     private ShoppingUserRepo shoppingUserRepo;
     @Autowired
+    private CategoryRepo categoryRepo;
+    @Autowired
     private BaseProductRepo baseProductRepo;
     @Autowired
     private ProductRepo productRepo;
@@ -56,8 +58,8 @@ public class MainServiceTest {
         testUtil = new TestUtil();
         activeUserResolver = Mockito.mock(ActiveUserResolver.class);
         userDetails = Mockito.mock(UserDetails.class);
-        mainService = new MainService(Mockito.mock(ImageService.class), shoppingUserRepo, baseProductRepo, productRepo,
-                productImageRepo, stockRepo, dto2Entity, entity2DTO);
+        mainService = new MainService(Mockito.mock(ImageService.class), shoppingUserRepo, categoryRepo, baseProductRepo,
+                productRepo, productImageRepo, stockRepo, dto2Entity, entity2DTO);
 
         shoppingCartService = new ShoppingCartService(shoppingUserRepo, stockRepo, entity2DTO, activeUserResolver);
     }
@@ -69,7 +71,9 @@ public class MainServiceTest {
 
     @Test
     public void createBaseProduct() {
-        CreateBaseProduct cbp = testUtil.createBaseProduct("chino pantolon", "pantolon");
+        CreateCategory cc = testUtil.createCategory();
+        Long categoryId = mainService.createCategory(cc);
+        CreateBaseProduct cbp = testUtil.createBaseProduct(categoryId, "pantolon");
 
         Long result = mainService.createBaseProduct(cbp);
         Assert.assertNotNull(result);
@@ -77,7 +81,9 @@ public class MainServiceTest {
 
     @Test
     public void createProduct() {
-        CreateBaseProduct cbp = testUtil.createBaseProduct("chino pantolon", "pantolon");
+        CreateCategory cc = testUtil.createCategory();
+        Long categoryId = mainService.createCategory(cc);
+        CreateBaseProduct cbp = testUtil.createBaseProduct(categoryId, "pantolon");
         Long baseProductId = mainService.createBaseProduct(cbp);
         CreateProduct cp = testUtil.createProduct(baseProductId);
 
@@ -88,7 +94,9 @@ public class MainServiceTest {
 
     @Test
     public void createStock() {
-        CreateBaseProduct cbp = testUtil.createBaseProduct("chino pantolon", "pantolon");
+        CreateCategory cc = testUtil.createCategory();
+        Long categoryId = mainService.createCategory(cc);
+        CreateBaseProduct cbp = testUtil.createBaseProduct(categoryId, "pantolon");
         Long baseProductId = mainService.createBaseProduct(cbp);
         CreateProduct cp = testUtil.createProduct(baseProductId);
         Long productId = mainService.createProduct(cp);
@@ -101,7 +109,9 @@ public class MainServiceTest {
 
     @Test
     public void readAllProducts() {
-        CreateBaseProduct cbp = testUtil.createBaseProduct("chino pantolon", "pantolon");
+        CreateCategory cc = testUtil.createCategory();
+        Long categoryId = mainService.createCategory(cc);
+        CreateBaseProduct cbp = testUtil.createBaseProduct(categoryId, "pantolon");
         Long baseProductId = mainService.createBaseProduct(cbp);
         CreateProduct cp = testUtil.createProduct(baseProductId);
         mainService.createProduct(cp);
@@ -124,7 +134,9 @@ public class MainServiceTest {
 
     @Test
     public void readUserCart() {
-        CreateBaseProduct cbp = testUtil.createBaseProduct("chino pantolon", "pantolon");
+        CreateCategory cc = testUtil.createCategory();
+        Long categoryId = mainService.createCategory(cc);
+        CreateBaseProduct cbp = testUtil.createBaseProduct(categoryId, "pantolon");
         Long baseProductId = mainService.createBaseProduct(cbp);
         CreateProduct cp = testUtil.createProduct(baseProductId);
         Long productId = mainService.createProduct(cp);
@@ -150,7 +162,7 @@ public class MainServiceTest {
 //    public void createProductAndStock() {
 //        CreateProduct cp = new CreateProduct();
 //        cp.name = "chino pantolon";
-//        cp.category = "pantolon";
+//        cp.name = "pantolon";
 //        Long productId = mainService.createProduct(cp);
 //
 //        CreateStock cs = new CreateStock();
@@ -164,7 +176,7 @@ public class MainServiceTest {
 //    public void readAllStock() {
 //        CreateProduct cp = new CreateProduct();
 //        cp.name = "chino pantolon";
-//        cp.category = "pantolon";
+//        cp.name = "pantolon";
 //        Long productId = mainService.createProduct(cp);
 //
 //        CreateStock cs = new CreateStock();
@@ -180,7 +192,7 @@ public class MainServiceTest {
 //    public void readAllStockWithQuantityGreaterThanZero() {
 //        CreateProduct cp = new CreateProduct();
 //        cp.name = "chino pantolon";
-//        cp.category = "pantolon";
+//        cp.name = "pantolon";
 //        Long productId = mainService.createProduct(cp);
 //
 //        CreateStock cs = new CreateStock();

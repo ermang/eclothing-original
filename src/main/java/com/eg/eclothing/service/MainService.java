@@ -20,6 +20,7 @@ import java.util.List;
 public class MainService {
     private final ImageService imageService;
     private final ShoppingUserRepo shoppingUserRepo;
+    private final CategoryRepo categoryRepo;
     private final BaseProductRepo baseProductRepo;
     private final ProductRepo productRepo;
     private final ProductImageRepo productImageRepo;
@@ -27,11 +28,12 @@ public class MainService {
     private final DTO2Entity dto2Entity;
     private final Entity2DTO entity2DTO;
 
-    public MainService(ImageService imageService,ShoppingUserRepo shoppingUserRepo, BaseProductRepo baseProductRepo,
-                       ProductRepo productRepo, ProductImageRepo productImageRepo, StockRepo stockRepo,
-                       DTO2Entity dto2Entity, Entity2DTO entity2DTO) {
+    public MainService(ImageService imageService,ShoppingUserRepo shoppingUserRepo, CategoryRepo categoryRepo,
+                       BaseProductRepo baseProductRepo, ProductRepo productRepo, ProductImageRepo productImageRepo,
+                       StockRepo stockRepo, DTO2Entity dto2Entity, Entity2DTO entity2DTO) {
         this.imageService = imageService;
         this.shoppingUserRepo = shoppingUserRepo;
+        this.categoryRepo = categoryRepo;
         this.baseProductRepo = baseProductRepo;
         this.productRepo = productRepo;
         this.productImageRepo = productImageRepo;
@@ -137,15 +139,24 @@ public class MainService {
     }
 
     public ReadCategories readAllCategories() {
-        List<CategoryOnly> categoryOnlyList = baseProductRepo.findAllBy();
+        List<Category> categoryList = categoryRepo.findAll();
 
-        List<String> categories = new ArrayList<>();
-        for(CategoryOnly co: categoryOnlyList)
-            categories.add(co.getCategory());
+        List<ReadCategory> categories = new ArrayList<>();
+        for(Category c: categoryList)
+            categories.add(entity2DTO.category2ReadCategory(c));
 
         ReadCategories rc = new ReadCategories();
         rc.categories = categories;
         return rc;
+    }
+
+    public Long createCategory(CreateCategory createCategory) {
+        Category c = new Category();
+        c.setName(createCategory.name);
+
+        c = categoryRepo.save(c);
+
+        return c.getId();
     }
 
 //    public ReadStock readStock(Long id) {

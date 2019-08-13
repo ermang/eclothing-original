@@ -48,7 +48,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"chino pantolon\",\n    \"category\": \"pantolon\"\n}"
+					"raw": "{\n    \"name\": \"mavi amerika\",\n    \"categoryId\": 1\n}"
 				},
 				"url": {
 					"raw": "localhost:8080/baseProduct",
@@ -335,6 +335,35 @@
 					"port": "8080",
 					"path": [
 						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_category",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"gomlek\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/category",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"category"
 					]
 				}
 			},

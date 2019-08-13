@@ -5,18 +5,22 @@ import com.eg.eclothing.dto.CreateProduct;
 import com.eg.eclothing.dto.CreateProductWithStock;
 import com.eg.eclothing.dto.CreateStock;
 import com.eg.eclothing.entity.BaseProduct;
+import com.eg.eclothing.entity.Category;
 import com.eg.eclothing.entity.Product;
 import com.eg.eclothing.entity.Stock;
 import com.eg.eclothing.repo.BaseProductRepo;
+import com.eg.eclothing.repo.CategoryRepo;
 import com.eg.eclothing.repo.ProductRepo;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DTO2Entity {
+    private final CategoryRepo categoryRepo;
     private final BaseProductRepo baseProductRepo;
     private final ProductRepo productRepo;
 
-    public DTO2Entity(BaseProductRepo baseProductRepo, ProductRepo productRepo) {
+    public DTO2Entity(CategoryRepo categoryRepo, BaseProductRepo baseProductRepo, ProductRepo productRepo) {
+        this.categoryRepo = categoryRepo;
         this.baseProductRepo = baseProductRepo;
         this.productRepo = productRepo;
     }
@@ -43,7 +47,7 @@ public class DTO2Entity {
 //    public Product createProductWithStock2Product(CreateProductWithStock c) {
 //        Product product=new Product();
 //        product.setName(c.name);
-//        product.setCategory(c.category);
+//        product.setCategory(c.name);
 //
 //        return product;
 //    }
@@ -61,7 +65,8 @@ public class DTO2Entity {
 
     public BaseProduct createBaseProduct2BaseProduct(CreateBaseProduct cbp) {
         BaseProduct bp =  new BaseProduct();
-        bp.setCategory(cbp.category);
+        Category c=  categoryRepo.findById(cbp.categoryId).get();
+        bp.setCategory(c);
         bp.setName(cbp.name);
 
         return bp;

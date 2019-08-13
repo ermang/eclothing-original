@@ -2,6 +2,7 @@ package com.eg.eclothing.util;
 
 import com.eg.eclothing.dto.*;
 import com.eg.eclothing.entity.BaseProduct;
+import com.eg.eclothing.entity.Category;
 import com.eg.eclothing.entity.Product;
 import com.eg.eclothing.entity.Stock;
 import com.eg.eclothing.repo.ProductImageRepo;
@@ -24,7 +25,7 @@ public class Entity2DTO {
     public ReadProduct product2ReadProduct(Product p) {
         ReadProduct rp = new ReadProduct();
         rp.baseProductId= p.getBaseProduct().getId();
-        rp.baseProductCategory = p.getBaseProduct().getCategory();
+        rp.baseProductCategory = p.getBaseProduct().getCategory().getName();
         rp.baseProductName = p.getBaseProduct().getName();
         rp.productId = p.getId();
         rp.color = p.getColor();
@@ -40,7 +41,7 @@ public class Entity2DTO {
         ReadCartItem item = new ReadCartItem();
         item.baseProductId = s.getProduct().getBaseProduct().getId();
         item.baseProductName = s.getProduct().getBaseProduct().getName();
-        item.baseProductCategory = s.getProduct().getBaseProduct().getCategory();
+        item.baseProductCategory = s.getProduct().getBaseProduct().getCategory().getName();
         item.price = s.getProduct().getPrice();
         item.productId = s.getProduct().getId();
         item.color = s.getProduct().getColor();
@@ -55,7 +56,7 @@ public class Entity2DTO {
     public ReadBaseProduct baseProduct2ReadBaseProduct(BaseProduct bp) {
         ReadBaseProduct rbp = new ReadBaseProduct();
         rbp.id = bp.getId();
-        rbp.category = bp.getCategory();
+        rbp.category = bp.getCategory().getName();
         rbp.name = bp.getName();
 
         return rbp;
@@ -78,6 +79,14 @@ public class Entity2DTO {
         }
 
         return rps;
+    }
+
+    public ReadCategory category2ReadCategory(Category c) {
+        ReadCategory rc = new ReadCategory();
+        rc.id = c.getId();
+        rc.name = c.getName();
+
+        return rc;
     }
 
 //    public ReadStockList stocks2ReadStockList(List<Stock> stocks) {

@@ -33,6 +33,13 @@ public class MainController {
         return true;
     }
 
+    @PostMapping("/category")
+    public Long createCategory(@RequestBody CreateCategory createCategory) {
+        Long result = mainService.createCategory(createCategory);
+
+        return result;
+    }
+
     @PostMapping("/baseProduct")
     public Long createBaseProduct(@RequestBody CreateBaseProduct createBaseProduct) {
         Long result = mainService.createBaseProduct(createBaseProduct);

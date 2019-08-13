@@ -16,7 +16,7 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     //@EntityGraph(value = "Product.readBaseProduct" ,type = EntityGraph.EntityGraphType.LOAD)
     @EntityGraph(attributePaths = {"baseProduct"})
     @Query(value = "select p from Product p where"
-                + " (:category IS NULL OR p.baseProduct.category = :category) AND"
+                + " (:category IS NULL OR p.baseProduct.category.name = :category) AND"
                 + " (:minPrice IS NULL OR p.price >= :minPrice) AND"
                 + " (:maxPrice IS NULL OR p.price <= :maxPrice) AND"
                 + " (:color IS NULL OR p.color = :color)")
