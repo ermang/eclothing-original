@@ -1,10 +1,13 @@
 package com.eg.eclothing.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class BaseProduct extends BaseEntity{
     private String name;
+    
+    @Column(unique = true)
     private String category;
 
     public String getName() {

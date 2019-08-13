@@ -321,6 +321,24 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "read_categories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

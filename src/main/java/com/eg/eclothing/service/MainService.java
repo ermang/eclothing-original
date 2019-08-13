@@ -4,6 +4,7 @@ import com.eg.eclothing.dto.*;
 import com.eg.eclothing.entity.*;
 import com.eg.eclothing.packy.Role;
 import com.eg.eclothing.repo.*;
+import com.eg.eclothing.repo.projection.CategoryOnly;
 import com.eg.eclothing.util.DTO2Entity;
 import com.eg.eclothing.util.Entity2DTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -133,6 +134,18 @@ public class MainService {
         }
 
         return true;
+    }
+
+    public ReadCategories readAllCategories() {
+        List<CategoryOnly> categoryOnlyList = baseProductRepo.findAllBy();
+
+        List<String> categories = new ArrayList<>();
+        for(CategoryOnly co: categoryOnlyList)
+            categories.add(co.getCategory());
+
+        ReadCategories rc = new ReadCategories();
+        rc.categories = categories;
+        return rc;
     }
 
 //    public ReadStock readStock(Long id) {

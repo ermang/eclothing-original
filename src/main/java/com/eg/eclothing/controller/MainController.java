@@ -59,6 +59,13 @@ public class MainController {
         return result;
     }
 
+    @GetMapping("/categories")
+    public ReadCategories readCategoryList(){
+        ReadCategories result = mainService.readAllCategories();
+
+        return result;
+    }
+
     @GetMapping("/products")
     public ReadProductList readProductList(@RequestParam(required = false)  String category,
                                            @RequestParam(required = false) BigDecimal minPrice,
