@@ -108,7 +108,7 @@ public class MainServiceTest {
         mainService.createProduct(cp);
         mainService.createProduct(cp);
 
-        ReadProductList result = mainService.readAllProducts(null, null, null);
+        ReadProductList result = mainService.readAllProducts(null, null, null, null);
         Assert.assertEquals(3, result.readProducts.size());
     }
 

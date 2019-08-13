@@ -92,8 +92,8 @@ public class MainService {
         return stock.getId();
     }
 
-    public ReadProductList readAllProducts(String category, BigDecimal minPrice, BigDecimal maxPrice) {
-        List<Product> products = productRepo.findAll(category, minPrice, maxPrice);//ProductsJoinedWithBaseProducts();//findAll();
+    public ReadProductList readAllProducts(String category, BigDecimal minPrice, BigDecimal maxPrice, String color) {
+        List<Product> products = productRepo.findAll(category, minPrice, maxPrice, color);//ProductsJoinedWithBaseProducts();//findAll();
         List<ReadProduct> readProducts = new ArrayList<>();
         for(Product p: products)
             readProducts.add(entity2DTO.product2ReadProduct(p));

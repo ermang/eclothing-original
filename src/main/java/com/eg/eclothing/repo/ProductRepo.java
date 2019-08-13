@@ -14,10 +14,12 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 //    List<Product> findAllProductsGroupByBaseProductId();
 
     //@EntityGraph(value = "Product.readBaseProduct" ,type = EntityGraph.EntityGraphType.LOAD)
-    //@EntityGraph(attributePaths = {"baseProduct"})
+    @EntityGraph(attributePaths = {"baseProduct"})
     @Query(value = "select p from Product p where"
                 + " (:category IS NULL OR p.baseProduct.category = :category) AND"
                 + " (:minPrice IS NULL OR p.price >= :minPrice) AND"
-                + " (:maxPrice IS NULL OR p.price <= :maxPrice)")
-    List<Product> findAll(@Param("category") String category, @Param("minPrice") BigDecimal minPrice, @Param("maxPrice") BigDecimal maxPrice);//ProductsJoinedWithBaseProducts();
+                + " (:maxPrice IS NULL OR p.price <= :maxPrice) AND"
+                + " (:color IS NULL OR p.color = :color)")
+    List<Product> findAll(@Param("category") String category, @Param("minPrice") BigDecimal minPrice,
+                          @Param("maxPrice") BigDecimal maxPrice, @Param("color") String color);
 }

@@ -263,7 +263,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/products?category=pantolon&minPrice=10&maxPrice=100",
+					"raw": "localhost:8080/products?category=pantolon&minPrice=10&maxPrice=100&color=blue",
 					"host": [
 						"localhost"
 					],
@@ -283,6 +283,10 @@
 						{
 							"key": "maxPrice",
 							"value": "100"
+						},
+						{
+							"key": "color",
+							"value": "blue"
 						}
 					]
 				}

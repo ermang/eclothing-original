@@ -62,8 +62,9 @@ public class MainController {
     @GetMapping("/products")
     public ReadProductList readProductList(@RequestParam(required = false)  String category,
                                            @RequestParam(required = false) BigDecimal minPrice,
-                                           @RequestParam(required = false)  BigDecimal maxPrice){
-        ReadProductList result = mainService.readAllProducts(category, minPrice, maxPrice);
+                                           @RequestParam(required = false)  BigDecimal maxPrice,
+                                           @RequestParam(required = false)  String color){
+        ReadProductList result = mainService.readAllProducts(category, minPrice, maxPrice, color);
         return result;
     }
 
