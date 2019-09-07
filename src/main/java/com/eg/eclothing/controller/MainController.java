@@ -116,6 +116,13 @@ public class MainController {
 
         return result;
     }
+
+    @PostMapping("/checkout")
+    public String checkout(@RequestBody ReadBasket readBasket) {
+        String result = mainService.checkout(readBasket);
+
+        return result;
+    }
 //
 //    @PostMapping("/coupon")
 //    public Long createCoupon(@RequestBody CreateCouponDTO createCouponDTO) {

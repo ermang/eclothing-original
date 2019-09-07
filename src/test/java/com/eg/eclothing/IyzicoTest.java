@@ -3,7 +3,7 @@ package com.eg.eclothing;
 import com.iyzipay.Options;
 import com.iyzipay.model.*;
 import com.iyzipay.request.CreateCheckoutFormInitializeRequest;
-import org.junit.Ignore;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;

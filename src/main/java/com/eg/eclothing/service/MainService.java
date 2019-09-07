@@ -7,6 +7,9 @@ import com.eg.eclothing.repo.*;
 import com.eg.eclothing.repo.projection.CategoryOnly;
 import com.eg.eclothing.util.DTO2Entity;
 import com.eg.eclothing.util.Entity2DTO;
+import com.iyzipay.Options;
+import com.iyzipay.model.*;
+import com.iyzipay.request.CreateCheckoutFormInitializeRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -157,6 +160,84 @@ public class MainService {
         c = categoryRepo.save(c);
 
         return c.getId();
+    }
+
+    public String checkout(ReadBasket readBasket) {
+        Options options = new Options();
+        options.setApiKey("sandbox-etzdcNHoKGk6f3sWOyss7PGIWMbJLvMi");
+        options.setSecretKey("sandbox-ocT5lGkZaPrU416iKnmbRf5wOtEex64M");
+        options.setBaseUrl("https://sandbox-api.iyzipay.com");//(System.getProperty("baseUrl"));
+
+        CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
+        request.setLocale(Locale.TR.getValue());
+        request.setConversationId("123456789");
+        request.setPrice(new BigDecimal("99.99"));
+        request.setPaidPrice(new BigDecimal("99.99"));
+        request.setCurrency(Currency.TRY.name());
+        request.setBasketId("B67832");
+        request.setPaymentGroup(PaymentGroup.PRODUCT.name());
+        request.setCallbackUrl("https://www.merchant.com/callback");
+        request.setDebitCardAllowed(Boolean.TRUE);
+
+        List<Integer> enabledInstallments = new ArrayList<>();
+        enabledInstallments.add(2);
+        enabledInstallments.add(3);
+        enabledInstallments.add(6);
+        enabledInstallments.add(9);
+        request.setEnabledInstallments(enabledInstallments);
+
+        Buyer buyer = new Buyer();
+        buyer.setId("BY789");
+        buyer.setName("John");
+        buyer.setSurname("Doe");
+        buyer.setGsmNumber("+905350000000");
+        buyer.setEmail("email@email.com");
+        buyer.setIdentityNumber("74300864791");
+        buyer.setLastLoginDate("2015-10-05 12:43:35");
+        buyer.setRegistrationDate("2013-04-21 15:12:09");
+        buyer.setRegistrationAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
+        buyer.setIp("85.34.78.112");
+        buyer.setCity("Istanbul");
+        buyer.setCountry("Turkey");
+        buyer.setZipCode("34732");
+        request.setBuyer(buyer);
+
+        Address shippingAddress = new Address();
+        shippingAddress.setContactName("Jane Doe");
+        shippingAddress.setCity("Istanbul");
+        shippingAddress.setCountry("Turkey");
+        shippingAddress.setAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
+        shippingAddress.setZipCode("34742");
+        request.setShippingAddress(shippingAddress);
+
+        Address billingAddress = new Address();
+        billingAddress.setContactName("Jane Doe");
+        billingAddress.setCity("Istanbul");
+        billingAddress.setCountry("Turkey");
+        billingAddress.setAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
+        billingAddress.setZipCode("34742");
+        request.setBillingAddress(billingAddress);
+
+        List<BasketItem> basketItems = new ArrayList<BasketItem>();
+
+        for(BasketContent bc : readBasket.basketContents) {
+            BasketItem basketItem = new BasketItem();
+
+            Stock s = stockRepo.findById(bc.stockId).get();
+            basketItem.setId(s.getId().toString());
+            basketItem.setName(s.getProduct().getBaseProduct().getName());
+            basketItem.setCategory1(s.getProduct().getBaseProduct().getCategory().getName());
+            basketItem.setItemType(BasketItemType.PHYSICAL.name());
+            basketItem.setPrice(s.getProduct().getPrice());
+
+            basketItems.add(basketItem);
+        }
+
+        request.setBasketItems(basketItems);
+
+        CheckoutFormInitialize checkoutFormInitialize = CheckoutFormInitialize.create(request, options);
+
+        return checkoutFormInitialize.getPaymentPageUrl();
     }
 
 //    public ReadStock readStock(Long id) {
