@@ -368,6 +368,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "checkout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"basketContents\": [\n        {\n            \"stockId\": 1,\n            \"qunatity\": 1\n        }\n    ],\n    \"shippindAddress\": {\n        \"contactName\": \"esref gulmez\",\n        \"city\": \"istanbul\",\n        \"country\": \"turkiye\",\n        \"address\": \"o sokak bu mahalle\",\n        \"zipCode\": \"12345\"\n    },\n    \"billingAddresss\": {\n        \"contactName\": \"esref gulmez\",\n        \"city\": \"istanbul\",\n        \"country\": \"turkiye\",\n        \"address\": \"o sokak bu mahalle\",\n        \"zipCode\": \"12345\"\n    },\n    \"readBuyer\": {\n        \"name\": \"esref\",\n        \"surname\": \"gulmez\",\n        \"gsmNumber\": \"05366666666\",\n        \"email\": \"esref.gulmez@gmail.com\",\n        \"identityNumber\": \"123456789\",\n        \"registrationAddress\": \"bizim adres\",\n        \"city\": \"istanbul\",\n        \"country\": \"turkiye\"\n    }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/checkout",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"checkout"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
