@@ -2,9 +2,11 @@ package com.eg.eclothing.controller;
 
 import com.eg.eclothing.dto.*;
 import com.eg.eclothing.service.MainService;
+import com.eg.eclothing.service.PaymentService;
 import com.eg.eclothing.service.ShoppingCartService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
 @RestController
@@ -12,14 +14,16 @@ import java.math.BigDecimal;
 public class MainController {
 
     private final MainService mainService;
+    private final PaymentService paymentService;
     private final ShoppingCartService shoppingCartService;
 //    private final CreateUserDTOValidator createUserDTOValidator;
 //    private final CreateTopicDTOValidator createTopicDTOValidator;
 //    private final CreateThreadDTOValidator createThreadDTOValidator;
 
-    public MainController(MainService mainService, ShoppingCartService shoppingCartService) {
+    public MainController(MainService mainService, ShoppingCartService shoppingCartService, PaymentService paymentService) {
         this.mainService = mainService;
         this.shoppingCartService =shoppingCartService;
+        this.paymentService = paymentService;
 
     }
 
@@ -118,8 +122,8 @@ public class MainController {
     }
 
     @PostMapping("/checkout")
-    public String checkout(@RequestBody ReadBasket readBasket) {
-        String result = mainService.checkout(readBasket);
+    public String checkout(@RequestBody CheckoutBasket checkoutBasket, HttpServletRequest request) {
+        String result = paymentService.checkout(checkoutBasket, request.getRemoteAddr());
 
         return result;
     }

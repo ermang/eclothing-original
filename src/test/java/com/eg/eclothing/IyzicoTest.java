@@ -4,6 +4,7 @@ import com.iyzipay.Options;
 import com.iyzipay.model.*;
 import com.iyzipay.request.CreateCheckoutFormInitializeRequest;
 
+import com.iyzipay.request.RetrieveCheckoutFormRequest;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -114,5 +115,17 @@ public class IyzicoTest {
         assertNull(checkoutFormInitialize.getErrorGroup());
         assertNotNull(checkoutFormInitialize.getCheckoutFormContent());
         assertNotNull(checkoutFormInitialize.getPaymentPageUrl());
+
+        RetrieveCheckoutFormRequest request2 = new RetrieveCheckoutFormRequest();
+        request2.setLocale(Locale.TR.getValue());
+        request2.setConversationId("123456789");
+        request2.setToken(checkoutFormInitialize.getToken());
+
+        CheckoutForm checkoutForm = CheckoutForm.retrieve(request2, options);
+
+        System.out.println(checkoutForm);
     }
+
+
+
 }
