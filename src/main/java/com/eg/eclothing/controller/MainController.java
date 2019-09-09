@@ -122,8 +122,8 @@ public class MainController {
     }
 
     @PostMapping("/checkout")
-    public String checkout(@RequestBody CheckoutBasket checkoutBasket, HttpServletRequest request) {
-        String result = paymentService.checkout(checkoutBasket, request.getRemoteAddr());
+    public ReadCheckoutFormInitialize checkout(@RequestBody CheckoutBasket checkoutBasket, HttpServletRequest request) {
+        ReadCheckoutFormInitialize result = paymentService.checkout(checkoutBasket, request.getRemoteAddr());
 
         return result;
     }

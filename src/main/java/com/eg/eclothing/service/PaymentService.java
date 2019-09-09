@@ -3,6 +3,7 @@ package com.eg.eclothing.service;
 import com.eg.eclothing.dto.BasketContent;
 import com.eg.eclothing.dto.CheckoutBasket;
 import com.eg.eclothing.dto.ReadBuyer;
+import com.eg.eclothing.dto.ReadCheckoutFormInitialize;
 import com.eg.eclothing.entity.Stock;
 import com.eg.eclothing.entity.UnregisteredBuyer;
 import com.eg.eclothing.repo.StockRepo;
@@ -26,7 +27,7 @@ public class PaymentService {
         this.unRegisteredBuyerRepo = unRegisteredBuyerRepo;
     }
 
-    public String checkout(CheckoutBasket checkoutBasket, String ip) {
+    public ReadCheckoutFormInitialize checkout(CheckoutBasket checkoutBasket, String ip) {
         Options options = new Options();
         options.setApiKey("sandbox-etzdcNHoKGk6f3sWOyss7PGIWMbJLvMi");
         options.setSecretKey("sandbox-ocT5lGkZaPrU416iKnmbRf5wOtEex64M");
@@ -78,7 +79,23 @@ public class PaymentService {
 
         CheckoutFormInitialize checkoutFormInitialize = CheckoutFormInitialize.create(request, options);
 
-        return checkoutFormInitialize.getPaymentPageUrl();
+        ReadCheckoutFormInitialize rcfi = initAndFillReadCheckoutFormInitialize(checkoutFormInitialize);
+        return rcfi;
+    }
+
+    private ReadCheckoutFormInitialize initAndFillReadCheckoutFormInitialize(CheckoutFormInitialize cfi) {
+        ReadCheckoutFormInitialize rcfi = new ReadCheckoutFormInitialize();
+        rcfi.token = cfi.getToken();
+        rcfi.tokenExpireTime = cfi.getTokenExpireTime();
+        rcfi.paymentPageUrl = cfi.getPaymentPageUrl();
+        rcfi.status = cfi.getStatus();
+        rcfi.errorCode = cfi.getErrorCode();
+        rcfi.errorMessage = cfi.getErrorMessage();
+        rcfi.errorGroup = cfi.getErrorGroup();
+        rcfi.systemTime = cfi.getSystemTime();
+        rcfi.conversationId = cfi.getConversationId();
+
+        return rcfi;
     }
 
     private Buyer initAndFillUnregisteredBuyer(CheckoutBasket checkoutBasket, String ip) {
