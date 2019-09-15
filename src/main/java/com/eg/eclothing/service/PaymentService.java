@@ -4,8 +4,11 @@ import com.eg.eclothing.dto.BasketContent;
 import com.eg.eclothing.dto.CheckoutBasket;
 import com.eg.eclothing.dto.ReadBuyer;
 import com.eg.eclothing.dto.ReadCheckoutFormInitialize;
+import com.eg.eclothing.entity.CoAddress;
+import com.eg.eclothing.entity.CreateCo;
 import com.eg.eclothing.entity.Stock;
 import com.eg.eclothing.entity.UnregisteredBuyer;
+import com.eg.eclothing.repo.CreateCoRepo;
 import com.eg.eclothing.repo.StockRepo;
 import com.eg.eclothing.repo.UnregisteredBuyerRepo;
 import com.iyzipay.Options;
@@ -21,27 +24,25 @@ import java.util.List;
 public class PaymentService {
     private final StockRepo stockRepo;
     private final UnregisteredBuyerRepo unRegisteredBuyerRepo;
+    private final CreateCoRepo createCoRepo;
 
-    public PaymentService(StockRepo stockRepo, UnregisteredBuyerRepo unRegisteredBuyerRepo){
+    public PaymentService(StockRepo stockRepo, UnregisteredBuyerRepo unRegisteredBuyerRepo, CreateCoRepo createCoRepo){
         this.stockRepo = stockRepo;
         this.unRegisteredBuyerRepo = unRegisteredBuyerRepo;
+        this.createCoRepo = createCoRepo;
     }
 
     public ReadCheckoutFormInitialize checkout(CheckoutBasket checkoutBasket, String ip) {
-        Options options = new Options();
-        options.setApiKey("sandbox-etzdcNHoKGk6f3sWOyss7PGIWMbJLvMi");
-        options.setSecretKey("sandbox-ocT5lGkZaPrU416iKnmbRf5wOtEex64M");
-        options.setBaseUrl("https://sandbox-api.iyzipay.com");//(System.getProperty("baseUrl"));
+        Options options = initAndFillOptions();
 
         CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
         request.setLocale(Locale.TR.getValue());
-        request.setConversationId("123456789");
+        //request.setConversationId("123456789");
         request.setPrice(new BigDecimal("99.99"));
         request.setPaidPrice(new BigDecimal("99.99"));
         request.setCurrency(Currency.TRY.name());
-        request.setBasketId("B67832");
         request.setPaymentGroup(PaymentGroup.PRODUCT.name());
-        request.setCallbackUrl("https://www.merchant.com/callback");
+        request.setCallbackUrl("http://localhost:8080/payment-result");
         request.setDebitCardAllowed(Boolean.TRUE);
 
         List<Integer> enabledInstallments = new ArrayList<>();
@@ -51,7 +52,9 @@ public class PaymentService {
         enabledInstallments.add(9);
         request.setEnabledInstallments(enabledInstallments);
 
-        Buyer buyer = initAndFillUnregisteredBuyer(checkoutBasket, ip);
+        UnregisteredBuyer urb = readBuyer2UnregisteredBuyer(checkoutBasket.readBuyer, ip);
+        urb = unRegisteredBuyerRepo.save(urb);
+        Buyer buyer = initAndFillBuyer(checkoutBasket, ip, urb.getId());
         request.setBuyer(buyer);
 
         Address shippingAddress = initAndFillShippingAddress(checkoutBasket);
@@ -75,12 +78,37 @@ public class PaymentService {
             basketItems.add(basketItem);
         }
 
+        CreateCo createCo = new CreateCo();
+        createCo.setUnregisteredBuyer(urb);
+        createCo.setBillingAddress(address2CoAddress(billingAddress));
+        createCo.setShippingAddress(address2CoAddress(shippingAddress));
+        createCo.setPrice(BigDecimal.ZERO);
+        createCo.setPaidPrice(BigDecimal.ZERO);
+
+        createCo = createCoRepo.save(createCo);
+        request.setConversationId(String.valueOf(createCo.getId()));
+
         request.setBasketItems(basketItems);
 
         CheckoutFormInitialize checkoutFormInitialize = CheckoutFormInitialize.create(request, options);
 
+        createCo.setStatus(checkoutFormInitialize.getStatus());
+        createCo.setErrorCode(checkoutFormInitialize.getErrorCode());
+        createCo.setErrorMessage(checkoutFormInitialize.getErrorMessage());
+        createCo.setErrorGroup(checkoutFormInitialize.getErrorGroup());
+        createCo.setSystemTime(checkoutFormInitialize.getSystemTime());
+        createCo = createCoRepo.save(createCo);
+
         ReadCheckoutFormInitialize rcfi = initAndFillReadCheckoutFormInitialize(checkoutFormInitialize);
         return rcfi;
+    }
+
+    private Options initAndFillOptions() {
+        Options options = new Options();
+        options.setApiKey("sandbox-etzdcNHoKGk6f3sWOyss7PGIWMbJLvMi");
+        options.setSecretKey("sandbox-ocT5lGkZaPrU416iKnmbRf5wOtEex64M");
+        options.setBaseUrl("https://sandbox-api.iyzipay.com");//(System.getProperty("baseUrl"));
+        return options;
     }
 
     private ReadCheckoutFormInitialize initAndFillReadCheckoutFormInitialize(CheckoutFormInitialize cfi) {
@@ -98,7 +126,7 @@ public class PaymentService {
         return rcfi;
     }
 
-    private Buyer initAndFillUnregisteredBuyer(CheckoutBasket checkoutBasket, String ip) {
+    private Buyer initAndFillBuyer(CheckoutBasket checkoutBasket, String ip, Long unregisteredBuyerId) {
         Buyer buyer = new Buyer();
         buyer.setName(checkoutBasket.readBuyer.name);
         buyer.setSurname(checkoutBasket.readBuyer.surname);
@@ -110,10 +138,7 @@ public class PaymentService {
         buyer.setCity(checkoutBasket.readBuyer.city);
         buyer.setCountry(checkoutBasket.readBuyer.country);
 
-        UnregisteredBuyer urb = readBuyer2UnregisteredBuyer(checkoutBasket.readBuyer, ip);
-        urb = unRegisteredBuyerRepo.save(urb);
-
-        buyer.setId(String.valueOf(urb.getId()));
+        buyer.setId(String.valueOf(unregisteredBuyerId));
 
         return buyer;
     }
@@ -131,6 +156,17 @@ public class PaymentService {
         urb.setCountry(rb.country);
 
         return urb;
+    }
+
+    private CoAddress address2CoAddress(Address a) {
+        CoAddress coAddress = new CoAddress();
+        coAddress.setAddress(a.getAddress());
+        coAddress.setCity(a.getCity());
+        coAddress.setContactName(a.getContactName());
+        coAddress.setCountry(a.getCountry());
+        coAddress.setZipCode(a.getZipCode());
+
+        return coAddress;
     }
 
     private Address initAndFillShippingAddress(CheckoutBasket checkoutBasket) {
