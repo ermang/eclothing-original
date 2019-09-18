@@ -154,6 +154,7 @@ public class MainController {
         result.paymentStatus = checkoutForm.getPaymentStatus();
         result.errorCode = checkoutForm.getErrorCode();
         result.errorGroup = checkoutForm.getErrorGroup();
+        result.errorMessage = checkoutForm.getErrorMessage();
         result.locale = checkoutForm.getLocale();
         result.systemTime = checkoutForm.getSystemTime();
         result.conversationId = checkoutForm.getConversationId();

@@ -28,6 +28,7 @@ public class ReadCheckoutForm {
     public BigDecimal iyziCommissionRateAmount;
     public BigDecimal merchantCommissionRate;
     public BigDecimal merchantCommissionRateAmount;
+    public String errorMessage;
 
     @Override
     public String toString() {
@@ -57,6 +58,7 @@ public class ReadCheckoutForm {
                 ", iyziCommissionRateAmount=" + iyziCommissionRateAmount +
                 ", merchantCommissionRate=" + merchantCommissionRate +
                 ", merchantCommissionRateAmount=" + merchantCommissionRateAmount +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }

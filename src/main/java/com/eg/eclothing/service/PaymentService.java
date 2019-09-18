@@ -37,7 +37,6 @@ public class PaymentService {
 
         CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest();
         request.setLocale(Locale.TR.getValue());
-        //request.setConversationId("123456789");
         request.setPrice(new BigDecimal("99.99"));
         request.setPaidPrice(new BigDecimal("99.99"));
         request.setCurrency(Currency.TRY.name());
