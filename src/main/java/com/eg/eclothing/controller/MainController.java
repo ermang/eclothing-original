@@ -134,7 +134,7 @@ public class MainController {
 
     @PostMapping("/payment-result")
     public String paymentResult(@RequestBody String token, HttpServletRequest request) {
-        int x = 5;
+        String tokenTrimmed = token.split("=")[1];
 
         Options options = new Options();
         options.setApiKey("sandbox-etzdcNHoKGk6f3sWOyss7PGIWMbJLvMi");
@@ -143,7 +143,7 @@ public class MainController {
 
         RetrieveCheckoutFormRequest request2 = new RetrieveCheckoutFormRequest();
         request2.setLocale(Locale.TR.getValue());
-        request2.setToken(token);
+        request2.setToken(tokenTrimmed);
 
         CheckoutForm checkoutForm = CheckoutForm.retrieve(request2, options);
 
