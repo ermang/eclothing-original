@@ -28,6 +28,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().disable(); //TODO: IFRAME THINGY
         http
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/coupon").hasAnyRole("USER", "ADMIN")
