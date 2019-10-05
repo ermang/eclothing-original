@@ -170,22 +170,22 @@ public class PaymentService {
 
     private Address initAndFillShippingAddress(CheckoutBasket checkoutBasket) {
         Address shippingAddress = new Address();
-        shippingAddress.setContactName(checkoutBasket.shippindAddress.contactName);
-        shippingAddress.setCity(checkoutBasket.shippindAddress.city);
-        shippingAddress.setCountry(checkoutBasket.shippindAddress.country);
-        shippingAddress.setAddress(checkoutBasket.shippindAddress.address);
-        shippingAddress.setZipCode(checkoutBasket.shippindAddress.zipCode);
+        shippingAddress.setContactName(checkoutBasket.shippingAddress.contactName);
+        shippingAddress.setCity(checkoutBasket.shippingAddress.city);
+        shippingAddress.setCountry(checkoutBasket.shippingAddress.country);
+        shippingAddress.setAddress(checkoutBasket.shippingAddress.address);
+        shippingAddress.setZipCode(checkoutBasket.shippingAddress.zipCode);
 
         return shippingAddress;
     }
 
     private Address initAndFillBillingAddress(CheckoutBasket checkoutBasket) {
         Address billingAddress = new Address();
-        billingAddress.setContactName(checkoutBasket.shippindAddress.contactName);
-        billingAddress.setCity(checkoutBasket.shippindAddress.city);
-        billingAddress.setCountry(checkoutBasket.shippindAddress.country);
-        billingAddress.setAddress(checkoutBasket.shippindAddress.address);
-        billingAddress.setZipCode(checkoutBasket.shippindAddress.zipCode);
+        billingAddress.setContactName(checkoutBasket.shippingAddress.contactName);
+        billingAddress.setCity(checkoutBasket.shippingAddress.city);
+        billingAddress.setCountry(checkoutBasket.shippingAddress.country);
+        billingAddress.setAddress(checkoutBasket.shippingAddress.address);
+        billingAddress.setZipCode(checkoutBasket.shippingAddress.zipCode);
 
         return billingAddress;
     }
