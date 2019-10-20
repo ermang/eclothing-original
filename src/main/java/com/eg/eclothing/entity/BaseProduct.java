@@ -1,5 +1,6 @@
 package com.eg.eclothing.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class BaseProduct extends BaseEntity{
+    @Column(unique = true, nullable = false)
     private String name;
 
     @NotNull

@@ -4,10 +4,8 @@ import com.eg.eclothing.dto.BasketContent;
 import com.eg.eclothing.dto.CheckoutBasket;
 import com.eg.eclothing.dto.ReadBuyer;
 import com.eg.eclothing.dto.ReadCheckoutFormInitialize;
-import com.eg.eclothing.entity.CoAddress;
-import com.eg.eclothing.entity.CreateCo;
-import com.eg.eclothing.entity.Stock;
-import com.eg.eclothing.entity.UnregisteredBuyer;
+import com.eg.eclothing.entity.*;
+import com.eg.eclothing.repo.CoItemRepo;
 import com.eg.eclothing.repo.CreateCoRepo;
 import com.eg.eclothing.repo.StockRepo;
 import com.eg.eclothing.repo.UnregisteredBuyerRepo;
@@ -25,11 +23,14 @@ public class PaymentService {
     private final StockRepo stockRepo;
     private final UnregisteredBuyerRepo unRegisteredBuyerRepo;
     private final CreateCoRepo createCoRepo;
+    private final CoItemRepo coItemRepo;
 
-    public PaymentService(StockRepo stockRepo, UnregisteredBuyerRepo unRegisteredBuyerRepo, CreateCoRepo createCoRepo){
+    public PaymentService(StockRepo stockRepo, UnregisteredBuyerRepo unRegisteredBuyerRepo, CreateCoRepo createCoRepo,
+                          CoItemRepo coItemRepo){
         this.stockRepo = stockRepo;
         this.unRegisteredBuyerRepo = unRegisteredBuyerRepo;
         this.createCoRepo = createCoRepo;
+        this.coItemRepo = coItemRepo;
     }
 
     public ReadCheckoutFormInitialize checkout(CheckoutBasket checkoutBasket, String ip) {
@@ -44,12 +45,7 @@ public class PaymentService {
         request.setCallbackUrl("http://localhost:8080/payment-result");
         request.setDebitCardAllowed(Boolean.TRUE);
 
-        List<Integer> enabledInstallments = new ArrayList<>();
-        enabledInstallments.add(2);
-        enabledInstallments.add(3);
-        enabledInstallments.add(6);
-        enabledInstallments.add(9);
-        request.setEnabledInstallments(enabledInstallments);
+        initAndFillEnabledInstallments(request);
 
         UnregisteredBuyer urb = readBuyer2UnregisteredBuyer(checkoutBasket.readBuyer, ip);
         urb = unRegisteredBuyerRepo.save(urb);
@@ -61,6 +57,17 @@ public class PaymentService {
 
         Address billingAddress = initAndFillBillingAddress(checkoutBasket);
         request.setBillingAddress(billingAddress);
+
+
+
+        CreateCo createCo = new CreateCo();
+        createCo.setUnregisteredBuyer(urb);
+        createCo.setBillingAddress(address2CoAddress(billingAddress));
+        createCo.setShippingAddress(address2CoAddress(shippingAddress));
+        createCo.setPrice(BigDecimal.ZERO);
+        createCo.setPaidPrice(BigDecimal.ZERO);
+
+        createCo = createCoRepo.save(createCo);
 
         List<BasketItem> basketItems = new ArrayList<>();
 
@@ -77,14 +84,20 @@ public class PaymentService {
             basketItems.add(basketItem);
         }
 
-        CreateCo createCo = new CreateCo();
-        createCo.setUnregisteredBuyer(urb);
-        createCo.setBillingAddress(address2CoAddress(billingAddress));
-        createCo.setShippingAddress(address2CoAddress(shippingAddress));
-        createCo.setPrice(BigDecimal.ZERO);
-        createCo.setPaidPrice(BigDecimal.ZERO);
+        //
+        List<CoItem> coItems = new ArrayList<>();
 
-        createCo = createCoRepo.save(createCo);
+        for(BasketContent bc : checkoutBasket.basketContents) {
+            CoItem coItem = new CoItem();
+
+            coItem.setCreateCo(createCo);
+            coItem.setStock(stockRepo.findById(bc.stockId).get());
+            coItems.add(coItem);
+        }
+
+        coItemRepo.saveAll(coItems);
+        //
+
         request.setConversationId(String.valueOf(createCo.getId()));
 
         request.setBasketItems(basketItems);
@@ -100,6 +113,15 @@ public class PaymentService {
 
         ReadCheckoutFormInitialize rcfi = initAndFillReadCheckoutFormInitialize(checkoutFormInitialize);
         return rcfi;
+    }
+
+    private void initAndFillEnabledInstallments(CreateCheckoutFormInitializeRequest request) {
+        List<Integer> enabledInstallments = new ArrayList<>();
+        enabledInstallments.add(2);
+        enabledInstallments.add(3);
+        enabledInstallments.add(6);
+        enabledInstallments.add(9);
+        request.setEnabledInstallments(enabledInstallments);
     }
 
     private Options initAndFillOptions() {
