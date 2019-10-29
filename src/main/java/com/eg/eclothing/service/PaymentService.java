@@ -58,8 +58,6 @@ public class PaymentService {
         Address billingAddress = initAndFillBillingAddress(checkoutBasket);
         request.setBillingAddress(billingAddress);
 
-
-
         CreateCo createCo = new CreateCo();
         createCo.setUnregisteredBuyer(urb);
         createCo.setBillingAddress(address2CoAddress(billingAddress));
@@ -69,34 +67,11 @@ public class PaymentService {
 
         createCo = createCoRepo.save(createCo);
 
-        List<BasketItem> basketItems = new ArrayList<>();
+        List<BasketItem> basketItems = setBasketItems(checkoutBasket.basketContents);
 
-        for(BasketContent bc : checkoutBasket.basketContents) {
-            BasketItem basketItem = new BasketItem();
-
-            Stock s = stockRepo.findById(bc.stockId).get();
-            basketItem.setId(s.getId().toString());
-            basketItem.setName(s.getProduct().getBaseProduct().getName());
-            basketItem.setCategory1(s.getProduct().getBaseProduct().getCategory().getName());
-            basketItem.setItemType(BasketItemType.PHYSICAL.name());
-            basketItem.setPrice(s.getProduct().getPrice());
-
-            basketItems.add(basketItem);
-        }
-
-        //
-        List<CoItem> coItems = new ArrayList<>();
-
-        for(BasketContent bc : checkoutBasket.basketContents) {
-            CoItem coItem = new CoItem();
-
-            coItem.setCreateCo(createCo);
-            coItem.setStock(stockRepo.findById(bc.stockId).get());
-            coItems.add(coItem);
-        }
+        List<CoItem> coItems =  initAndFillCoItems(checkoutBasket.basketContents, createCo);
 
         coItemRepo.saveAll(coItems);
-        //
 
         request.setConversationId(String.valueOf(createCo.getId()));
 
@@ -113,6 +88,38 @@ public class PaymentService {
 
         ReadCheckoutFormInitialize rcfi = initAndFillReadCheckoutFormInitialize(checkoutFormInitialize);
         return rcfi;
+    }
+
+    private List<BasketItem> setBasketItems(List<BasketContent> basketContents) {
+        List<BasketItem> basketItems = new ArrayList<>();
+
+        for(BasketContent bc : basketContents) {
+            BasketItem basketItem = new BasketItem();
+
+            Stock s = stockRepo.findById(bc.stockId).get();
+            basketItem.setId(s.getId().toString());
+            basketItem.setName(s.getProduct().getBaseProduct().getName());
+            basketItem.setCategory1(s.getProduct().getBaseProduct().getCategory().getName());
+            basketItem.setItemType(BasketItemType.PHYSICAL.name());
+            basketItem.setPrice(s.getProduct().getPrice());
+
+            basketItems.add(basketItem);
+        }
+
+        return basketItems;
+    }
+
+    private List<CoItem> initAndFillCoItems(List<BasketContent> basketContents, CreateCo createCo) {
+        List<CoItem> coItems = new ArrayList<>();
+        for(BasketContent bc : basketContents) {
+            CoItem coItem = new CoItem();
+
+            coItem.setCreateCo(createCo);
+            coItem.setStock(stockRepo.findById(bc.stockId).get());
+            coItems.add(coItem);
+        }
+
+        return coItems;
     }
 
     private void initAndFillEnabledInstallments(CreateCheckoutFormInitializeRequest request) {
